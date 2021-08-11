@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dhj.mapper.TClientLinkmanMapper">
+  <resultMap id="BaseResultMap" type="org.dhj.entity.TClientLinkman">
+    <id column="tid" property="tid" jdbcType="INTEGER"/>
+    <result column="tlid" jdbcType="INTEGER" property="tlid"/>
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="lname" jdbcType="VARCHAR" property="lname" />
+    <result column="ltel" jdbcType="VARCHAR" property="ltel" />
+    <result column="office_phone" jdbcType="VARCHAR" property="officePhone" />
+    <result column="hiredate" jdbcType="DATE" property="hiredate" />
+    <result column="dept" jdbcType="VARCHAR" property="dept" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+  </resultMap>
+  <update id="updateList" parameterType="org.dhj.entity.TClientLinkman">
+        update  t_client_linkman
+      <set>
+            <if test="cid != null">
+              cid = #{cid},
+            </if>
+        <if test="lname != null">
+          lname = #{lname},
+        </if>
+        <if test="ltel != null">
+          ltel = #{ltel},
+        </if>
+        <if test="officePhone != null">
+          office_phone = #{officePhone},
+        </if>
+        <if test="hiredate !=null ">
+          hiredate = #{hiredate},
+        </if>
+        <if test="dept != null">
+          dept = #{dept},
+        </if>
+        <if test="job != null">
+          job = #{job},
+        </if>
+        <if test="email != null">
+          email = #{email},
+        </if>
+        <if test="flag != null">
+          flag = #{flag}
+        </if>
+      </set>
+    where tid = #{tid}
+  </update>
+  <select id="queryLinkMan" parameterType="integer" resultType="org.dhj.entity.TClientLinkman">
+    select * from t_client_linkman where tlid = #{tlid}
+  </select>
+  <update id="updateMan" parameterType="org.dhj.entity.TClientLinkman">
+    update t_client_linkman
+    <set>
+        <if test="tlid != null">
+          tlid = #{tlid},
+        </if>
+        <if test="cid != null">
+          cid = #{cid},
+        </if>
+      <if test="lname != null">
+        lname = #{lname},
+      </if>
+      <if test="ltel != null">
+        ltel = #{ltel},
+      </if>
+      <if test="officePhone != null">
+        office_phone = #{officePhone},
+      </if>
+      <if test="hiredate !=null ">
+        hiredate = #{hiredate},
+      </if>
+      <if test="dept != null">
+        dept = #{dept},
+      </if>
+      <if test="job != null">
+        job = #{job},
+      </if>
+      <if test="email != null">
+        email = #{email},
+      </if>
+      <if test="flag != null">
+        flag = #{flag},
+      </if>
+    </set>
+        where
+  </update>
+  <insert id="insert" parameterType="org.dhj.entity.TClientLinkman">
+    insert into t_client_linkman (tlid,cid, lname, ltel,
+      office_phone, hiredate, dept,
+      job, email, flag)
+    values (#{tlid,jdbcType=INTEGER},#{cid,jdbcType=INTEGER}, #{lname,jdbcType=VARCHAR}, #{ltel,jdbcType=VARCHAR},
+      #{officePhone,jdbcType=VARCHAR}, #{hiredate,jdbcType=DATE}, #{dept,jdbcType=VARCHAR},
+      #{job,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="org.dhj.entity.TClientLinkman">
+    insert into t_client_linkman
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="tlid != null">
+          tlid,
+        </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="lname != null">
+        lname,
+      </if>
+      <if test="ltel != null">
+        ltel,
+      </if>
+      <if test="officePhone != null">
+        office_phone,
+      </if>
+      <if test="hiredate != null">
+        hiredate,
+      </if>
+      <if test="dept != null">
+        dept,
+      </if>
+      <if test="job != null">
+        job,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tlid != null">
+        #{jdbcType=INTEGER},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="lname != null">
+        #{lname,jdbcType=VARCHAR},
+      </if>
+      <if test="ltel != null">
+        #{ltel,jdbcType=VARCHAR},
+      </if>
+      <if test="officePhone != null">
+        #{officePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="hiredate != null">
+        #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="dept != null">
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="delete" parameterType="integer">
+    delete from t_client_linkman
+    where tlid = #{id}
+  </delete>
+  <delete id="deleteByCid" parameterType="integer">
+    delete from t_client_linkman
+    where cid = #{cid}
+  </delete>
+  <select id="queryList" resultMap="BaseResultMap">
+    select * from t_client_linkman
+  </select>
+  <update id="update" parameterType="org.dhj.entity.TClientLinkman">
+    update t_client_linkman
+    <set>
+      lname = #{lname},
+      ltel = #{ltel},
+      office_phone= #{officePhone},
+        hiredate = #{hiredate},
+        dept = #{dept},
+        job = #{job},
+        email = #{email},
+    </set>
+    where tid = #{tid}
+  </update>
+</mapper>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dhj.mapper.TCityMapper">
+
+  <select id="queryListForPid" parameterType="org.dhj.entity.TCity" resultType="org.dhj.entity.TCity">
+    select * from t_city where pid = #{pid}
+  </select>
+
+</mapper>

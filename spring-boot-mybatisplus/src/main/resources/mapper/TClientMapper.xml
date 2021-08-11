@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dhj.mapper.TClientMapper">
+  <resultMap id="BaseResultMap" type="org.dhj.entity.TClient">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="cname" jdbcType="VARCHAR" property="cname" />
+    <result column="intention" jdbcType="VARCHAR" property="intention" />
+    <result column="code_type" jdbcType="VARCHAR" property="codeType" />
+    <result column="industry_type" jdbcType="VARCHAR" property="industryType" />
+    <result column="unit_type" jdbcType="VARCHAR" property="unitType" />
+    <result column="code_id" jdbcType="VARCHAR" property="codeId" />
+    <result column="unit_count" jdbcType="INTEGER" property="unitCount" />
+    <result column="insure_count" jdbcType="INTEGER" property="insureCount" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="star_level" jdbcType="VARCHAR" property="starLevel" />
+    <result column="create_time" jdbcType="DATE" property="createTime"/>
+  </resultMap>
+
+  <resultMap id="client" type="org.dhj.entity.TClient">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="cname" jdbcType="VARCHAR" property="cname" />
+    <result column="intention" jdbcType="VARCHAR" property="intention" />
+    <result column="code_type" jdbcType="VARCHAR" property="codeType" />
+    <result column="industry_type" jdbcType="VARCHAR" property="industryType" />
+    <result column="unit_type" jdbcType="VARCHAR" property="unitType" />
+    <result column="code_id" jdbcType="VARCHAR" property="codeId" />
+    <result column="unit_count" jdbcType="INTEGER" property="unitCount" />
+    <result column="insure_count" jdbcType="INTEGER" property="insureCount" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="star_level" jdbcType="VARCHAR" property="starLevel" />
+    <result column="create_time" jdbcType="DATE" property="createTime"/>
+    <collection property="linkmanList" ofType="org.dhj.entity.TClientLinkman">
+      <id column="tid" jdbcType="INTEGER" property="tid"/>
+      <result column="tlid" jdbcType="INTEGER" property="tlid"/>
+      <result column="cid" jdbcType="VARCHAR" property="cid"/>
+      <result column="lname" jdbcType="VARCHAR" property="lname" />
+      <result column="ltel" jdbcType="VARCHAR" property="ltel" />
+      <result column="office_phone" jdbcType="VARCHAR" property="officePhone" />
+      <result column="hiredate" jdbcType="DATE" property="hiredate" />
+      <result column="dept" jdbcType="VARCHAR" property="dept" />
+      <result column="job" jdbcType="VARCHAR" property="job" />
+      <result column="email" jdbcType="VARCHAR" property="email" />
+      <result column="flag" jdbcType="INTEGER" property="flag" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id,cid, cname, intention, code_type, industry_type, unit_type, code_id, unit_count,
+    insure_count, address, star_level,create_time
+  </sql>
+
+  <select id="queryUser" resultMap="client" parameterType="org.dhj.entity.TClient">
+    select c.*,cl.*
+    from t_client c
+           left join t_client_linkman cl
+                     on c.id = cl.tlid
+    <where>
+      c.cid is not null
+    <if test="cname != null">
+     and c.cname like concat('%',#{cname},'%')
+    </if>
+    </where>
+  </select>
+
+  <select id="queryListForTClient" parameterType="org.dhj.entity.TClient" resultMap="client">
+    select c.*,cl.*
+    from t_client c
+    left join t_client_linkman cl
+    on c.id = cl.tlid
+    <where>
+      <if test="cname != null">
+        and c.cname like concat('%',#{cname},'%')
+      </if>
+    </where>
+  </select>
+  <select id="selectName" parameterType="org.dhj.entity.TClient" resultType="org.dhj.entity.TClient">
+    select * from t_client where cname = #{cname}
+  </select>
+  <select id="queryNotIdList" parameterType="org.dhj.entity.TClient" resultMap="client">
+    select c.*,cl.*
+    from t_client c
+           left join t_client_linkman cl
+                     on c.id = cl.tlid
+    where c.cid is null
+    <if test="cname != null">
+      and c.cname like concat('%',#{cname},'%')
+    </if>
+  </select>
+
+<select id="queryTClientById" resultMap="client" parameterType="integer">
+  select c.*,cl.*
+  from t_client c
+         left join t_client_linkman cl
+                   on c.id = cl.tlid
+  where id = #{id} order by cl.flag desc
+</select>
+
+  <delete id="deleteById" parameterType="integer">
+    delete from t_client where id = #{id}
+  </delete>
+
+  <select id="queryListForTClientId" resultMap="client" parameterType="integer">
+    select c.*,cl.*
+    from t_client c
+           left join t_client_linkman cl
+                     on c.id = cl.tlid
+    where c.cid = #{cid}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_client
+    where cid = #{cid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_client
+    where cid = #{cid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="cid" keyProperty="cid" parameterType="org.dhj.entity.TClient" useGeneratedKeys="true">
+    insert into t_client (cname, intention, code_type,
+      industry_type, unit_type, code_id,
+      unit_count, insure_count, address,
+      star_level,create_time)
+    values (#{cname,jdbcType=VARCHAR}, #{intention,jdbcType=VARCHAR}, #{codeType,jdbcType=VARCHAR},
+      #{industryType,jdbcType=VARCHAR}, #{unitType,jdbcType=VARCHAR}, #{codeId,jdbcType=VARCHAR},
+      #{unitCount,jdbcType=INTEGER}, #{insureCount,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+      #{starLevel,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective"  parameterType="org.dhj.entity.TClient" useGeneratedKeys="true">
+    insert into t_client
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="cid != null">
+          cid,
+        </if>
+      <if test="cname != null">
+        cname,
+      </if>
+      <if test="intention != null">
+        intention,
+      </if>
+      <if test="codeType != null">
+        code_type,
+      </if>
+      <if test="industryType != null">
+        industry_type,
+      </if>
+      <if test="unitType != null">
+        unit_type,
+      </if>
+      <if test="codeId != null">
+        code_id,
+      </if>
+      <if test="unitCount != null">
+        unit_count,
+      </if>
+      <if test="insureCount != null">
+        insure_count,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="starLevel != null">
+        star_level,
+      </if>
+      <if test="createTime !=null">
+        create_time
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cid != null">
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null">
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="intention != null">
+        #{intention,jdbcType=VARCHAR},
+      </if>
+      <if test="codeType != null">
+        #{codeType,jdbcType=VARCHAR},
+      </if>
+      <if test="industryType != null">
+        #{industryType,jdbcType=VARCHAR},
+      </if>
+      <if test="unitType != null">
+        #{unitType,jdbcType=VARCHAR},
+      </if>
+      <if test="codeId != null">
+        #{codeId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitCount != null">
+        #{unitCount,jdbcType=INTEGER},
+      </if>
+      <if test="insureCount != null">
+        #{insureCount,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="starLevel != null">
+        #{starLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime !=null">
+        #{createTime}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.dhj.entity.dto.TClientDTO">
+    update t_client
+    <set>
+        <if test="cid != null">
+          cid = #{cid,jdbcType=INTEGER},
+        </if>
+      <if test="cname != null">
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="intention != null">
+        intention = #{intention,jdbcType=VARCHAR},
+      </if>
+      <if test="codeType != null">
+        code_type = #{codeType,jdbcType=VARCHAR},
+      </if>
+      <if test="industryType != null">
+        industry_type = #{industryType,jdbcType=VARCHAR},
+      </if>
+      <if test="unitType != null">
+        unit_type = #{unitType,jdbcType=VARCHAR},
+      </if>
+      <if test="codeId != null">
+        code_id = #{codeId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitCount != null">
+        unit_count = #{unitCount,jdbcType=INTEGER},
+      </if>
+      <if test="insureCount != null">
+        insure_count = #{insureCount,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="starLevel != null">
+        star_level = #{starLevel,jdbcType=VARCHAR},
+      </if>
+        <if test="createTime != null">
+          create_time = #{createTime},
+        </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByid" parameterType="org.dhj.entity.TClient">
+    update t_client
+    <set>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null">
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="intention != null">
+        intention = #{intention,jdbcType=VARCHAR},
+      </if>
+      <if test="codeType != null">
+        code_type = #{codeType,jdbcType=VARCHAR},
+      </if>
+      <if test="industryType != null">
+        industry_type = #{industryType,jdbcType=VARCHAR},
+      </if>
+      <if test="unitType != null">
+        unit_type = #{unitType,jdbcType=VARCHAR},
+      </if>
+      <if test="codeId != null">
+        code_id = #{codeId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitCount != null">
+        unit_count = #{unitCount,jdbcType=INTEGER},
+      </if>
+      <if test="insureCount != null">
+        insure_count = #{insureCount,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="starLevel != null">
+        star_level = #{starLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateStandUser" parameterType="org.dhj.entity.dto.TClientDTO">
+
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.dhj.entity.TClient">
+    update t_client
+    set cname = #{cname,jdbcType=VARCHAR},
+      intention = #{intention,jdbcType=VARCHAR},
+      code_type = #{codeType,jdbcType=VARCHAR},
+      industry_type = #{industryType,jdbcType=VARCHAR},
+      unit_type = #{unitType,jdbcType=VARCHAR},
+      code_id = #{codeId,jdbcType=VARCHAR},
+      unit_count = #{unitCount,jdbcType=INTEGER},
+      insure_count = #{insureCount,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      star_level = #{starLevel,jdbcType=VARCHAR}
+    where cid = #{cid,jdbcType=INTEGER}
+  </update>
+</mapper>

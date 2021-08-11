@@ -1,0 +1,65 @@
+server:
+  port: 8080
+mq:
+  queue:
+    name: hellodemo1
+spring:
+  redis:
+    # 地址
+    #本地测试用
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  jackson:
+    #日期格式化
+    date-format: yyyy-MM-dd
+    serialization:
+      #格式化输出
+      indent_output: true
+      #忽略无法转换的对象
+#      fail_on_empty_beans: false
+    #设置空如何序列化
+#    defaultPropertyInclusion: NON_EMPTY
+    deserialization:
+      #允许对象忽略json中不存在的属性
+      fail_on_unknown_properties: false
+    parser:
+      #允许出现特殊字符和转义符
+      allow_unquoted_control_chars: true
+      #允许出现单引号
+      allow_single_quotes: true
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/j2se?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: org.dhj.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+knife4j:
+  enable: true
+  setting:
+    enableSwaggerModels: true
+    swaggerModelName: 实体类列表
